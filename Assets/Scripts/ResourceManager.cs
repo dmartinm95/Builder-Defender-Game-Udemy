@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -6,6 +7,9 @@ public class ResourceManager : MonoBehaviour
 {
     // this is public so it can be 'get' from other classes but can only be 'set' by this class 
     public static ResourceManager Instance { get; private set; }
+
+    // event definition
+    public event EventHandler OnResourceAmountChanged;
     
     private Dictionary<ResourceTypeSO, int> resourceAmountDictionary;
 
@@ -48,6 +52,10 @@ public class ResourceManager : MonoBehaviour
     public void AddResource(ResourceTypeSO resourceType, int amount)
     {
         resourceAmountDictionary[resourceType] += amount;
+        
+        // trigger the event
+        OnResourceAmountChanged?.Invoke(this, EventArgs.Empty);
+
         TestLogResourceAmountDictionary();
     }
 
